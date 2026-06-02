@@ -1,0 +1,11 @@
+# Test Document for MarkItDown
+
+This is a test document created to verify the conversion function of our GUI.
+It has:
+- A header
+- A list of items:
+  1. Item one
+  2. Item two
+- Some plain text.
+
+End of test.
