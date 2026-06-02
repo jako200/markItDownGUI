@@ -9,9 +9,11 @@ import os
 import sys
 import threading
 import datetime
+import math
 import tkinter as tk
 from tkinter import filedialog
 import customtkinter as ctk
+from PIL import Image, ImageDraw
 
 # Tentativo di importazione di MarkItDown per evitare crash all'avvio in caso di mancanza della libreria
 try:
@@ -24,24 +26,79 @@ except ImportError:
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
+def create_icon_image(icon_type, color="#FFFFFF"):
+    """
+    Genera un'immagine PNG 64x64 in memoria per fungere da icona, con sfondo trasparente.
+    """
+    img = Image.new("RGBA", (64, 64), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+    
+    if icon_type == "document":
+        # Disegna il foglio
+        draw.polygon([(16, 8), (40, 8), (48, 16), (48, 56), (16, 56)], outline=color, width=4)
+        # Disegna la piega dell'angolo
+        draw.line([(40, 8), (40, 16), (48, 16)], fill=color, width=4)
+        # Righe interne del documento
+        draw.line([(24, 26), (40, 26)], fill=color, width=3)
+        draw.line([(24, 36), (40, 36)], fill=color, width=3)
+        draw.line([(24, 46), (34, 46)], fill=color, width=3)
+        
+    elif icon_type == "folder":
+        # Disegna la cartella
+        draw.polygon([(8, 14), (22, 14), (28, 22), (56, 22), (56, 52), (8, 52)], outline=color, width=4)
+        draw.line([(8, 22), (28, 22)], fill=color, width=4)
+        
+    elif icon_type == "lightning":
+        # Disegna il fulmine
+        draw.polygon([(36, 4), (16, 32), (32, 32), (28, 60), (48, 32), (32, 32)], fill=color)
+        
+    elif icon_type == "gear":
+        # Disegna l'ingranaggio
+        center_x, center_y = 32, 32
+        draw.ellipse([(16, 16), (48, 48)], outline=color, width=4)
+        draw.ellipse([(26, 26), (38, 38)], outline=color, width=3)
+        for i in range(8):
+            angle = i * (2 * math.pi / 8)
+            x1 = center_x + 16 * math.cos(angle)
+            y1 = center_y + 16 * math.sin(angle)
+            x2 = center_x + 24 * math.cos(angle)
+            y2 = center_y + 24 * math.sin(angle)
+            draw.line([(x1, y1), (x2, y2)], fill=color, width=5)
+            
+    elif icon_type == "checkmark":
+        # Disegna la spunta
+        draw.line([(16, 32), (28, 44)], fill=color, width=6)
+        draw.line([(28, 44), (48, 18)], fill=color, width=6)
+        
+    return img
+
 class MarkItDownStudio(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # Configurazione Finestra Principale
+        # Configurazione Finestra Principale (Premium Obsidian Palette)
         self.title("MarkItDown Studio")
-        self.geometry("800x650")
-        self.minsize(700, 550)
+        self.geometry("800x700")
+        self.minsize(720, 600)
+        self.configure(fg_color="#0B0F19")
 
         # Stato interno
         self.selected_input_path = ""
         self.selected_output_path = ""
         self.is_converting = False
 
-        # Configurazione layout griglia principale
+        # Griglia principale della finestra
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(2, weight=1)  # La console dei log si espande
+        self.grid_rowconfigure(0, weight=0)
+        self.grid_rowconfigure(1, weight=0)
+        self.grid_rowconfigure(2, weight=0)
+        self.grid_rowconfigure(3, weight=1) # La console dei log si espande verticalmente
+        self.grid_rowconfigure(4, weight=0)
 
+        # Generazione e caricamento delle icone in memoria
+        self.init_icons()
+
+        # Creazione dei widget
         self.create_widgets()
 
         # Messaggio di benvenuto / stato librerie
@@ -56,19 +113,58 @@ class MarkItDownStudio(ctk.CTk):
         else:
             self.log_message("Libreria 'markitdown' caricata con successo. Pronto per la conversione.", "info")
 
+    def init_icons(self):
+        """Inizializza le icone in formato CTkImage partendo dai disegni in memoria."""
+        # Icone bianche per i pulsanti e le card
+        self.doc_icon = ctk.CTkImage(
+            light_image=create_icon_image("document", "#FFFFFF"),
+            dark_image=create_icon_image("document", "#FFFFFF"),
+            size=(18, 18)
+        )
+        self.folder_icon = ctk.CTkImage(
+            light_image=create_icon_image("folder", "#FFFFFF"),
+            dark_image=create_icon_image("folder", "#FFFFFF"),
+            size=(18, 18)
+        )
+        self.lightning_icon = ctk.CTkImage(
+            light_image=create_icon_image("lightning", "#FFFFFF"),
+            dark_image=create_icon_image("lightning", "#FFFFFF"),
+            size=(18, 18)
+        )
+        
+        # Icone grigie per lo stato disabilitato o secondario
+        self.doc_icon_muted = ctk.CTkImage(
+            light_image=create_icon_image("document", "#9CA3AF"),
+            dark_image=create_icon_image("document", "#9CA3AF"),
+            size=(18, 18)
+        )
+        self.folder_icon_muted = ctk.CTkImage(
+            light_image=create_icon_image("folder", "#9CA3AF"),
+            dark_image=create_icon_image("folder", "#9CA3AF"),
+            size=(18, 18)
+        )
+
+        # Icona di spunta verde per il successo del caricamento
+        self.checkmark_icon = ctk.CTkImage(
+            light_image=create_icon_image("checkmark", "#10B981"),
+            dark_image=create_icon_image("checkmark", "#10B981"),
+            size=(16, 16)
+        )
+
     def create_widgets(self):
         # ----------------------------------------------------
         # 1. HEADER FRAME
         # ----------------------------------------------------
         self.header_frame = ctk.CTkFrame(self, fg_color="transparent")
-        self.header_frame.grid(row=0, column=0, padx=25, pady=(20, 10), sticky="ew")
+        self.header_frame.grid(row=0, column=0, padx=30, pady=(25, 10), sticky="ew")
         self.header_frame.grid_columnconfigure(0, weight=1)
 
         # Titolo dell'applicazione
         self.title_label = ctk.CTkLabel(
             self.header_frame, 
             text="MarkItDown Studio", 
-            font=ctk.CTkFont(family="Segoe UI", size=26, weight="bold")
+            font=ctk.CTkFont(family="Segoe UI", size=28, weight="bold"),
+            text_color="#FFFFFF"
         )
         self.title_label.grid(row=0, column=0, sticky="w")
 
@@ -77,116 +173,179 @@ class MarkItDownStudio(ctk.CTk):
             self.header_frame, 
             text="Convertitore GUI elegante per Microsoft MarkItDown", 
             font=ctk.CTkFont(family="Segoe UI", size=13),
-            text_color="gray"
+            text_color="#9CA3AF"
         )
-        self.subtitle_label.grid(row=1, column=0, sticky="w", pady=(2, 0))
-
-        # Toggle Dark/Light Mode
-        self.theme_switch = ctk.CTkSwitch(
-            self.header_frame, 
-            text="Modalità Scura", 
-            command=self.toggle_theme,
-            font=ctk.CTkFont(family="Segoe UI", size=12)
-        )
-        self.theme_switch.select()  # Attivo di default per Dark Mode
-        self.theme_switch.grid(row=0, column=1, rowspan=2, sticky="e", padx=10)
+        self.subtitle_label.grid(row=1, column=0, sticky="w", pady=(4, 0))
 
         # ----------------------------------------------------
-        # 2. FILE MANAGEMENT CARD (INPUT & OUTPUT)
+        # 2. FILE MANAGEMENT - CARD 1 (INPUT)
         # ----------------------------------------------------
-        self.card_frame = ctk.CTkFrame(self, corner_radius=12)
-        self.card_frame.grid(row=1, column=0, padx=25, pady=10, sticky="ew")
-        self.card_frame.grid_columnconfigure(1, weight=1)
-
-        # --- Sezione File Origine ---
-        self.input_label = ctk.CTkLabel(
-            self.card_frame, 
-            text="File di Origine:", 
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold")
+        self.input_card = ctk.CTkFrame(
+            self, 
+            fg_color="#151B26", 
+            border_color="#2D3748", 
+            border_width=1, 
+            corner_radius=14
         )
-        self.input_label.grid(row=0, column=0, padx=(20, 10), pady=(20, 5), sticky="w")
+        self.input_card.grid(row=1, column=0, padx=30, pady=10, sticky="ew")
+        self.input_card.grid_columnconfigure(0, weight=1)
 
+        # Titolo Card con Icona
+        self.input_card_title = ctk.CTkLabel(
+            self.input_card,
+            text="  Seleziona File da Convertire",
+            image=self.doc_icon_muted,
+            compound="left",
+            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            text_color="#FFFFFF"
+        )
+        self.input_card_title.grid(row=0, column=0, columnspan=2, padx=20, pady=(15, 5), sticky="w")
+
+        # Feedback Area per File Selezionato (micro-interazione)
+        self.status_frame = ctk.CTkFrame(self.input_card, fg_color="transparent")
+        self.status_frame.grid(row=1, column=0, columnspan=2, padx=20, pady=(2, 8), sticky="w")
+        
+        self.status_icon_label = ctk.CTkLabel(self.status_frame, text="")
+        self.status_icon_label.pack(side="left", padx=(0, 5))
+        
+        self.status_text_label = ctk.CTkLabel(
+            self.status_frame, 
+            text="Nessun file selezionato per la conversione", 
+            font=ctk.CTkFont(family="Segoe UI", size=12, slant="italic"),
+            text_color="#9CA3AF"
+        )
+        self.status_text_label.pack(side="left")
+
+        # Casella di inserimento e Pulsante
         self.input_entry = ctk.CTkEntry(
-            self.card_frame, 
-            placeholder_text="Seleziona un file da convertire...", 
+            self.input_card, 
+            placeholder_text="Fai clic su 'Sfoglia' per caricare un file...", 
             state="readonly",
-            height=35,
-            font=ctk.CTkFont(family="Segoe UI", size=12)
+            height=38,
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            fg_color="#0B0F19",
+            border_color="#2D3748",
+            text_color="#FFFFFF",
+            corner_radius=8
         )
-        self.input_entry.grid(row=1, column=0, columnspan=2, padx=(20, 10), pady=(0, 15), sticky="ew")
+        self.input_entry.grid(row=2, column=0, padx=(20, 10), pady=(0, 20), sticky="ew")
 
         self.select_file_btn = ctk.CTkButton(
-            self.card_frame, 
+            self.input_card, 
             text="Sfoglia...", 
-            width=100,
-            height=35,
+            image=self.doc_icon,
+            compound="left",
+            width=130,
+            height=38,
             command=self.select_input_file,
-            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold")
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            fg_color="#2563EB",
+            hover_color="#1D4ED8",
+            text_color="#FFFFFF",
+            corner_radius=10
         )
-        self.select_file_btn.grid(row=1, column=2, padx=(0, 20), pady=(0, 15), sticky="ew")
+        self.select_file_btn.grid(row=2, column=1, padx=(0, 20), pady=(0, 20), sticky="e")
 
-        # --- Sezione Destinazione Output ---
-        self.output_label = ctk.CTkLabel(
-            self.card_frame, 
-            text="Destinazione Output:", 
-            font=ctk.CTkFont(family="Segoe UI", size=13, weight="bold")
+        # ----------------------------------------------------
+        # 3. FILE MANAGEMENT - CARD 2 (OUTPUT)
+        # ----------------------------------------------------
+        self.output_card = ctk.CTkFrame(
+            self, 
+            fg_color="#151B26", 
+            border_color="#2D3748", 
+            border_width=1, 
+            corner_radius=14
         )
-        self.output_label.grid(row=2, column=0, padx=(20, 10), pady=(5, 5), sticky="w")
+        self.output_card.grid(row=2, column=0, padx=30, pady=10, sticky="ew")
+        self.output_card.grid_columnconfigure(0, weight=1)
 
+        # Titolo Card con Icona
+        self.output_card_title = ctk.CTkLabel(
+            self.output_card,
+            text="  Configurazione Destinazione Output",
+            image=self.folder_icon_muted,
+            compound="left",
+            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            text_color="#FFFFFF"
+        )
+        self.output_card_title.grid(row=0, column=0, columnspan=2, padx=20, pady=(15, 8), sticky="w")
+
+        # Casella di inserimento e Pulsante
         self.output_entry = ctk.CTkEntry(
-            self.card_frame, 
-            placeholder_text="La cartella di output predefinita sarà la stessa del file d'origine...", 
+            self.output_card, 
+            placeholder_text="Verrà generato un file .md nello stesso percorso di origine...", 
             state="readonly",
-            height=35,
-            font=ctk.CTkFont(family="Segoe UI", size=12)
+            height=38,
+            font=ctk.CTkFont(family="Segoe UI", size=12),
+            fg_color="#0B0F19",
+            border_color="#2D3748",
+            text_color="#FFFFFF",
+            corner_radius=8
         )
-        self.output_entry.grid(row=3, column=0, columnspan=2, padx=(20, 10), pady=(0, 20), sticky="ew")
+        self.output_entry.grid(row=1, column=0, padx=(20, 10), pady=(0, 20), sticky="ew")
 
         self.select_output_btn = ctk.CTkButton(
-            self.card_frame, 
-            text="Cambia...", 
-            width=100,
-            height=35,
+            self.output_card, 
+            text="Modifica...", 
+            image=self.folder_icon_muted,
+            compound="left",
+            width=130,
+            height=38,
             command=self.select_output_destination,
-            state="disabled",  # Abilitato solo dopo la scelta dell'input
+            state="disabled",
             font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
             fg_color="transparent",
-            border_width=2,
-            text_color=("black", "white")
+            border_width=1,
+            border_color="#2D3748",
+            text_color="#9CA3AF",
+            hover_color="#1F2937",
+            corner_radius=10
         )
-        self.select_output_btn.grid(row=3, column=2, padx=(0, 20), pady=(0, 20), sticky="ew")
+        self.select_output_btn.grid(row=1, column=1, padx=(0, 20), pady=(0, 20), sticky="e")
 
         # ----------------------------------------------------
-        # 3. CONSOLE & LOG AREA (EXPANDS TO FILL HEIGHT)
+        # 4. CONSOLE & LOG AREA (EXPANDS TO FILL HEIGHT)
         # ----------------------------------------------------
-        self.log_frame = ctk.CTkFrame(self)
-        self.log_frame.grid(row=2, column=0, padx=25, pady=10, sticky="nsew")
+        self.log_frame = ctk.CTkFrame(self, fg_color="transparent")
+        self.log_frame.grid(row=3, column=0, padx=30, pady=10, sticky="nsew")
         self.log_frame.grid_columnconfigure(0, weight=1)
         self.log_frame.grid_rowconfigure(1, weight=1)
 
         self.log_title = ctk.CTkLabel(
             self.log_frame, 
             text="Console Log delle Operazioni:", 
-            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold")
+            font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold"),
+            text_color="#9CA3AF"
         )
-        self.log_title.grid(row=0, column=0, padx=15, pady=(10, 5), sticky="w")
+        self.log_title.grid(row=0, column=0, padx=5, pady=(5, 5), sticky="w")
 
         self.log_textbox = ctk.CTkTextbox(
             self.log_frame, 
             font=ctk.CTkFont(family="Consolas", size=11),
-            state="disabled"
+            state="disabled",
+            fg_color="#0D111A",
+            text_color="#9CA3AF",
+            border_width=1,
+            border_color="#1E293B",
+            corner_radius=10
         )
-        self.log_textbox.grid(row=1, column=0, padx=15, pady=(0, 15), sticky="nsew")
+        self.log_textbox.grid(row=1, column=0, padx=0, pady=0, sticky="nsew")
 
         # ----------------------------------------------------
-        # 4. ACTION & PROGRESS AREA
+        # 5. ACTION & PROGRESS AREA
         # ----------------------------------------------------
         self.action_frame = ctk.CTkFrame(self, fg_color="transparent")
-        self.action_frame.grid(row=3, column=0, padx=25, pady=(10, 25), sticky="ew")
+        self.action_frame.grid(row=4, column=0, padx=30, pady=(10, 25), sticky="ew")
         self.action_frame.grid_columnconfigure(0, weight=1)
 
         # Barra di progresso
-        self.progress_bar = ctk.CTkProgressBar(self.action_frame, height=8)
+        self.progress_bar = ctk.CTkProgressBar(
+            self.action_frame, 
+            height=6,
+            fg_color="#1E293B",
+            progress_color="#2563EB",
+            corner_radius=3
+        )
         self.progress_bar.grid(row=0, column=0, pady=(0, 15), sticky="ew")
         self.progress_bar.set(0.0)
 
@@ -194,27 +353,22 @@ class MarkItDownStudio(ctk.CTk):
         self.convert_button = ctk.CTkButton(
             self.action_frame, 
             text="Converti in Markdown", 
+            image=self.lightning_icon,
+            compound="left",
             height=48,
             command=self.start_conversion,
-            state="disabled",  # Disabilitato fino a selezione file valido
-            font=ctk.CTkFont(family="Segoe UI", size=15, weight="bold")
+            state="disabled",
+            font=ctk.CTkFont(family="Segoe UI", size=14, weight="bold"),
+            fg_color="#2563EB",
+            hover_color="#1D4ED8",
+            text_color="#FFFFFF",
+            corner_radius=12
         )
         self.convert_button.grid(row=1, column=0, sticky="ew")
 
     # ----------------------------------------------------
     # LOGICA DI INTERFACCIA ED EVENTI
     # ----------------------------------------------------
-    def toggle_theme(self):
-        """Alterna l'aspetto dell'applicazione tra modalità scura e chiara."""
-        if self.theme_switch.get() == 1:
-            ctk.set_appearance_mode("dark")
-            self.theme_switch.configure(text="Modalità Scura")
-            self.log_message("Passato alla modalità scura.", "info")
-        else:
-            ctk.set_appearance_mode("light")
-            self.theme_switch.configure(text="Modalità Chiara")
-            self.log_message("Passato alla modalità chiara.", "info")
-
     def select_input_file(self):
         """Apre un filedialog per selezionare il file da convertire."""
         file_types = [
@@ -252,8 +406,23 @@ class MarkItDownStudio(ctk.CTk):
             self.output_entry.insert(0, self.selected_output_path)
             self.output_entry.configure(state="readonly")
 
+            # Micro-interazione: aggiorna lo stato visivo della Card 1
+            self.input_card.configure(border_color="#10B981")
+            self.status_icon_label.configure(image=self.checkmark_icon)
+            self.status_text_label.configure(
+                text=f"File pronto: {file_name}",
+                text_color="#10B981",
+                font=ctk.CTkFont(family="Segoe UI", size=12, weight="bold")
+            )
+
             # Abilita il bottone Sfoglia output e il pulsante Converti
-            self.select_output_btn.configure(state="normal")
+            self.select_output_btn.configure(
+                state="normal",
+                fg_color="transparent",
+                border_color="#374151",
+                text_color="#FFFFFF",
+                image=self.folder_icon
+            )
             if MARKITDOWN_AVAILABLE:
                 self.convert_button.configure(state="normal")
                 
@@ -294,13 +463,10 @@ class MarkItDownStudio(ctk.CTk):
         # Accesso robusto al widget tk.Text interno per la gestione dei tag
         text_widget = self.log_textbox._textbox if hasattr(self.log_textbox, "_textbox") else self.log_textbox
         
-        # Configura i tag per supportare il dark/light mode correttamente
-        is_dark = ctk.get_appearance_mode() == "Dark"
-        default_color = "#E0E0E0" if is_dark else "#1A1A1A"
-        
-        text_widget.tag_config("info", foreground=default_color)
-        text_widget.tag_config("error", foreground="#FF5252")    # Rosso acceso moderno
-        text_widget.tag_config("success", foreground="#00E676")  # Verde brillante moderno
+        # Configura i tag per il tema scuro personalizzato
+        text_widget.tag_config("info", foreground="#9CA3AF")
+        text_widget.tag_config("error", foreground="#EF4444")    # Rosso moderno
+        text_widget.tag_config("success", foreground="#10B981")  # Verde moderno
         
         self.log_textbox.insert("end", formatted_msg + "\n", level)
         self.log_textbox.see("end")
