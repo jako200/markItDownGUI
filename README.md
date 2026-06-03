@@ -72,20 +72,6 @@ Lo script eseguirà automaticamente le seguenti operazioni:
 
 ---
 
-## 📂 Struttura del Progetto
-
-```
-markItDownUI/
-├── main.py                    # Codice sorgente principale dell'applicazione GUI
-├── build.py                   # Script di automazione per la compilazione (.exe)
-├── requirements.txt           # File con le dipendenze Python richieste
-├── MarkItDown_Studio.spec     # File di configurazione generato da PyInstaller
-├── README.md                  # Questo file di documentazione
-└── test_input.txt             # File di testo per test rapidi di conversione
-```
-
----
-
 ## 🗂️ Formati di File Supportati da MarkItDown
 Il motore di conversione sottostante converte in Markdown i seguenti formati:
 * **Word** (`.docx`)
