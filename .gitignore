@@ -1,0 +1,27 @@
+# Cache e file temporanei di compilazione Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.mypy_cache/
+
+# Ambiente Virtuale (se creato localmente nel progetto)
+venv/
+.venv/
+env/
+ENV/
+
+# Output e file temporanei di compilazione PyInstaller
+build/
+dist/
+*.spec
+
+# File di configurazione degli IDE/Editor (opzionale ma raccomandato)
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
