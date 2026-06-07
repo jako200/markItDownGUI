@@ -22,7 +22,7 @@ Ensure you have **Python 3.8** or higher installed on your system.
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/your-username/markItDownUI.git](https://github.com/your-username/markItDownUI.git)
+git clone https://github.com/jako200/markItDownGUI
 cd markItDownUI
 
 ```
