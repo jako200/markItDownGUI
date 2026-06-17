@@ -65,6 +65,7 @@ def run_build():
         "--name=MarkItDown_Studio", # Nome iniziale del file .exe
         "--collect-all", "customtkinter", # Raccoglie tutti i file di customtkinter (es. temi, font)
         "--collect-all", "markitdown",    # Raccoglie tutti i moduli e risorse di markitdown
+        "--collect-all", "magika",        # Raccoglie tutti i modelli e risorse di magika
         "main.py"                # Script principale dell'applicazione
     ]
 
