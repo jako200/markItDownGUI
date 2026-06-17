@@ -23,7 +23,7 @@ class LogConsole(ctk.CTkFrame):
         # Label
         self.label = ctk.CTkLabel(
             self, 
-            text="Console Log delle Operazioni:", 
+            text="Operations Log Console:", 
             font=get_font(12, weight="bold"),
             text_color=TEXT_MUTED
         )
@@ -151,7 +151,7 @@ class FileListScrollFrame(ctk.CTkScrollableFrame):
         # Status Badge (3)
         status_label = ctk.CTkLabel(
             row_frame,
-            text="In attesa",
+            text="Pending",
             font=get_font(11, weight="bold"),
             text_color=TEXT_MUTED,
             fg_color="#1E293B",

@@ -79,7 +79,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.subtitle_label = ctk.CTkLabel(
             self.header_frame, 
-            text="Convertitore GUI elegante per Microsoft MarkItDown", 
+            text="Elegant GUI converter for Microsoft MarkItDown", 
             font=get_font(13),
             text_color=TEXT_MUTED
         )
@@ -105,8 +105,8 @@ class MarkItDownStudio(ctk.CTk):
         self.tabview.grid(row=1, column=0, padx=30, pady=(0, 10), sticky="nsew")
         
         # Add tabs
-        self.tabview.add("Conversione Singola")
-        self.tabview.add("Conversione Multipla")
+        self.tabview.add("Single Conversion")
+        self.tabview.add("Batch Conversion")
         
         # Setup tabs layouts
         self.setup_single_conversion_tab()
@@ -119,7 +119,7 @@ class MarkItDownStudio(ctk.CTk):
         self.console.grid(row=2, column=0, padx=30, pady=(0, 20), sticky="ew")
 
     def setup_single_conversion_tab(self):
-        tab = self.tabview.tab("Conversione Singola")
+        tab = self.tabview.tab("Single Conversion")
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(0, weight=0) # Card input
         tab.grid_rowconfigure(1, weight=0) # Card output
@@ -135,7 +135,7 @@ class MarkItDownStudio(ctk.CTk):
         
         self.single_input_title = ctk.CTkLabel(
             self.single_input_card,
-            text="  Seleziona File da Convertire",
+            text="  Select File to Convert",
             image=self.doc_icon_muted,
             compound="left",
             font=get_font(14, weight="bold"),
@@ -152,7 +152,7 @@ class MarkItDownStudio(ctk.CTk):
         
         self.single_status_text = ctk.CTkLabel(
             self.single_status_frame, 
-            text="Nessun file selezionato per la conversione", 
+            text="No file selected for conversion", 
             font=get_font(12, slant="italic"),
             text_color=TEXT_MUTED
         )
@@ -161,7 +161,7 @@ class MarkItDownStudio(ctk.CTk):
         # Input Path entry & Browse btn
         self.single_input_entry = ctk.CTkEntry(
             self.single_input_card, 
-            placeholder_text="Fai clic su 'Sfoglia' per caricare un file...", 
+            placeholder_text="Click on 'Browse' to load a file...", 
             state="readonly",
             height=38,
             font=get_font(12),
@@ -174,7 +174,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.single_select_input_btn = ctk.CTkButton(
             self.single_input_card, 
-            text="Sfoglia...", 
+            text="Browse...", 
             image=self.doc_icon,
             compound="left",
             width=130,
@@ -197,7 +197,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.single_output_title = ctk.CTkLabel(
             self.single_output_card,
-            text="  Configurazione Destinazione Output",
+            text="  Output Destination Configuration",
             image=self.folder_icon_muted,
             compound="left",
             font=get_font(14, weight="bold"),
@@ -208,7 +208,7 @@ class MarkItDownStudio(ctk.CTk):
         # Output Path entry & Modify btn
         self.single_output_entry = ctk.CTkEntry(
             self.single_output_card, 
-            placeholder_text="Verrà generato un file .md nello stesso percorso di origine...", 
+            placeholder_text="A .md file will be generated in the same source path...", 
             state="readonly",
             height=38,
             font=get_font(12),
@@ -221,7 +221,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.single_select_output_btn = ctk.CTkButton(
             self.single_output_card, 
-            text="Modifica...", 
+            text="Modify...", 
             image=self.folder_icon_muted,
             compound="left",
             width=130,
@@ -255,7 +255,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.single_convert_btn = ctk.CTkButton(
             self.single_action_frame, 
-            text="Converti in Markdown", 
+            text="Convert to Markdown", 
             image=self.lightning_icon,
             compound="left",
             height=48,
@@ -270,7 +270,7 @@ class MarkItDownStudio(ctk.CTk):
         self.single_convert_btn.grid(row=1, column=0, sticky="ew")
 
     def setup_batch_conversion_tab(self):
-        tab = self.tabview.tab("Conversione Multipla")
+        tab = self.tabview.tab("Batch Conversion")
         tab.grid_columnconfigure(0, weight=1)
         tab.grid_rowconfigure(0, weight=1) # File list container (expands)
         tab.grid_rowconfigure(1, weight=0) # Card output directory config
@@ -282,13 +282,13 @@ class MarkItDownStudio(ctk.CTk):
         self.batch_list_container.grid_columnconfigure(0, weight=1)
         self.batch_list_container.grid_rowconfigure(1, weight=1)
 
-        # Top controls: "Aggiungi", "Svuota"
+        # Top controls: "Add", "Clear"
         self.batch_list_controls = ctk.CTkFrame(self.batch_list_container, fg_color="transparent")
         self.batch_list_controls.grid(row=0, column=0, pady=(0, 8), sticky="ew")
         
         self.batch_count_lbl = ctk.CTkLabel(
             self.batch_list_controls,
-            text="Coda file da convertire: 0 file",
+            text="File conversion queue: 0 files",
             font=get_font(12, weight="bold"),
             text_color=TEXT_PRIMARY
         )
@@ -296,7 +296,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.batch_clear_btn = ctk.CTkButton(
             self.batch_list_controls,
-            text="Svuota Lista",
+            text="Clear List",
             image=self.clear_icon,
             compound="left",
             width=110,
@@ -313,7 +313,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.batch_add_btn = ctk.CTkButton(
             self.batch_list_controls,
-            text="Aggiungi File...",
+            text="Add Files...",
             image=self.doc_icon,
             compound="left",
             width=140,
@@ -342,7 +342,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.batch_output_title = ctk.CTkLabel(
             self.batch_output_card,
-            text="  Configurazione Destinazione Output Multiplo",
+            text="  Batch Output Destination Configuration",
             image=self.folder_icon_muted,
             compound="left",
             font=get_font(14, weight="bold"),
@@ -354,7 +354,7 @@ class MarkItDownStudio(ctk.CTk):
         self.batch_mode_var = ctk.StringVar(value="source")
         self.radio_source = ctk.CTkRadioButton(
             self.batch_output_card,
-            text="Salva nella stessa cartella di origine del file sorgente",
+            text="Save in the same directory as the source file",
             variable=self.batch_mode_var,
             value="source",
             command=self.toggle_batch_output_mode,
@@ -367,7 +367,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.radio_custom = ctk.CTkRadioButton(
             self.batch_output_card,
-            text="Salva tutti i file convertiti in una cartella specifica",
+            text="Save all converted files in a specific folder",
             variable=self.batch_mode_var,
             value="custom",
             command=self.toggle_batch_output_mode,
@@ -381,7 +381,7 @@ class MarkItDownStudio(ctk.CTk):
         # Path input & modify (initially hidden/disabled style)
         self.batch_output_entry = ctk.CTkEntry(
             self.batch_output_card, 
-            placeholder_text="I file Markdown verranno posizionati accanto all'originale...", 
+            placeholder_text="Markdown files will be placed next to the original...", 
             state="readonly",
             height=38,
             font=get_font(12),
@@ -394,7 +394,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.batch_select_output_btn = ctk.CTkButton(
             self.batch_output_card, 
-            text="Sfoglia...", 
+            text="Browse...", 
             image=self.folder_icon_muted,
             compound="left",
             width=130,
@@ -428,7 +428,7 @@ class MarkItDownStudio(ctk.CTk):
 
         self.batch_convert_btn = ctk.CTkButton(
             self.batch_action_frame, 
-            text="Converti Tutti i File", 
+            text="Convert All Files", 
             image=self.lightning_icon,
             compound="left",
             height=48,
@@ -446,22 +446,22 @@ class MarkItDownStudio(ctk.CTk):
     # SYSTEM INITIALIZATION & DIAGNOSTIC LOGS
     # ----------------------------------------------------
     def log_init_status(self):
-        self.console.write_log("Benvenuto in MarkItDown Studio!", "info")
+        self.console.write_log("Welcome to MarkItDown Studio!", "info")
         if not self.converter.is_available():
             if not MARKITDOWN_AVAILABLE:
                 self.console.write_log(
-                    "ERRORE DI SISTEMA: La libreria 'markitdown' non è installata.\n"
-                    "Installa la libreria eseguendo: pip install \"markitdown[all]\" nel terminale.",
+                    "SYSTEM ERROR: The 'markitdown' library is not installed.\n"
+                    "Install the library by running: pip install \"markitdown[all]\" in the terminal.",
                     "error"
                 )
             else:
                 self.console.write_log(
-                    "ERRORE DI SISTEMA: La libreria 'markitdown' è installata ma non si è inizializzata correttamente.",
+                    "SYSTEM ERROR: The 'markitdown' library is installed but did not initialize correctly.",
                     "error"
                 )
                 if self.converter.init_error:
                     self.console.write_log(
-                        f"Dettaglio errore di inizializzazione:\n{self.converter.init_error}",
+                        f"Initialization error detail:\n{self.converter.init_error}",
                         "error"
                     )
             # Disable actions
@@ -470,7 +470,7 @@ class MarkItDownStudio(ctk.CTk):
             self.single_select_input_btn.configure(state="disabled")
             self.batch_add_btn.configure(state="disabled")
         else:
-            self.console.write_log("Libreria 'markitdown' caricata con successo. Pronto per la conversione.", "success")
+            self.console.write_log("'markitdown' library loaded successfully. Ready for conversion.", "success")
             self.update_convert_buttons_state()
 
     # ----------------------------------------------------
@@ -490,7 +490,7 @@ class MarkItDownStudio(ctk.CTk):
         ]
         
         path = filedialog.askopenfilename(
-            title="Seleziona il file da convertire",
+            title="Select file to convert",
             filetypes=file_types
         )
         
@@ -531,8 +531,8 @@ class MarkItDownStudio(ctk.CTk):
                 image=self.folder_icon
             )
             
-            self.console.write_log(f"Caricato file singolo: {file_name} ({self.selected_single_input})", "info")
-            self.console.write_log(f"Destinazione predefinita: {self.selected_single_output}", "info")
+            self.console.write_log(f"Loaded single file: {file_name} ({self.selected_single_input})", "info")
+            self.console.write_log(f"Default destination: {self.selected_single_output}", "info")
             
             self.update_convert_buttons_state()
 
@@ -545,9 +545,9 @@ class MarkItDownStudio(ctk.CTk):
         initial_file = os.path.basename(self.selected_single_output)
         
         path = filedialog.asksaveasfilename(
-            title="Seleziona la destinazione del file Markdown",
+            title="Select Markdown file destination",
             defaultextension=".md",
-            filetypes=[("File Markdown", "*.md"), ("Tutti i file", "*.*")],
+            filetypes=[("Markdown Files", "*.md"), ("All Files", "*.*")],
             initialdir=initial_dir,
             initialfile=initial_file
         )
@@ -558,22 +558,22 @@ class MarkItDownStudio(ctk.CTk):
             self.single_output_entry.delete(0, "end")
             self.single_output_entry.insert(0, self.selected_single_output)
             self.single_output_entry.configure(state="readonly")
-            self.console.write_log(f"Destinazione file singolo modificata in: {self.selected_single_output}", "info")
-
+            self.console.write_log(f"Single file destination changed to: {self.selected_single_output}", "info")
+ 
     def start_single_conversion(self):
         """Launch single file conversion on a background thread."""
         if not self.converter.is_available() or self.is_converting:
             return
             
         if not self.selected_single_input or not self.selected_single_output:
-            self.console.write_log("Errore: Selezionare prima un file e un percorso di output validi.", "error")
+            self.console.write_log("Error: Please select a valid file and output path first.", "error")
             return
             
         self.is_converting = True
         
         # Disable UI components
         self.tabview.configure(state="disabled") # Disables switching tabs or changing tab options
-        self.single_convert_btn.configure(state="disabled", text="Conversione in corso...")
+        self.single_convert_btn.configure(state="disabled", text="Converting...")
         self.single_select_input_btn.configure(state="disabled")
         self.single_select_output_btn.configure(state="disabled")
         
@@ -581,7 +581,7 @@ class MarkItDownStudio(ctk.CTk):
         self.single_progress.start()
         
         filename = os.path.basename(self.selected_single_input)
-        self.console.write_log(f"Avvio conversione per il file: {filename}", "info")
+        self.console.write_log(f"Starting conversion for file: {filename}", "info")
         
         # Start worker thread
         conversion_thread = threading.Thread(
@@ -599,12 +599,12 @@ class MarkItDownStudio(ctk.CTk):
             self.after(0, self.on_single_failure, str(e))
 
     def on_single_success(self, output_path):
-        self.console.write_log("Conversione singola completata con successo!", "success")
-        self.console.write_log(f"File generato correttamente in: {output_path}", "success")
+        self.console.write_log("Single conversion completed successfully!", "success")
+        self.console.write_log(f"File correctly generated at: {output_path}", "success")
         self.reset_single_gui_state()
 
     def on_single_failure(self, error_message):
-        self.console.write_log("ERRORE DURANTE LA CONVERSIONE SINGOLA:", "error")
+        self.console.write_log("ERROR DURING SINGLE CONVERSION:", "error")
         self.console.write_log(error_message, "error")
         self.reset_single_gui_state()
 
@@ -615,7 +615,7 @@ class MarkItDownStudio(ctk.CTk):
         # Restore button states
         self.single_select_input_btn.configure(state="normal")
         self.single_select_output_btn.configure(state="normal")
-        self.single_convert_btn.configure(state="normal", text="Converti in Markdown")
+        self.single_convert_btn.configure(state="normal", text="Convert to Markdown")
         
         # Stop progress
         self.single_progress.stop()
@@ -628,12 +628,12 @@ class MarkItDownStudio(ctk.CTk):
     def select_batch_files(self):
         """Browse dialog to add multiple files to the batch queue."""
         file_types = [
-            ("File supportati", "*.docx;*.pptx;*.xlsx;*.pdf;*.html;*.htm;*.txt;*.csv;*.xml;*.json"),
-            ("Tutti i file", "*.*")
+            ("Supported files", "*.docx;*.pptx;*.xlsx;*.pdf;*.html;*.htm;*.txt;*.csv;*.xml;*.json"),
+            ("All Files", "*.*")
         ]
         
         paths = filedialog.askopenfilenames(
-            title="Seleziona uno o più file da aggiungere",
+            title="Select one or more files to add",
             filetypes=file_types
         )
         
@@ -644,7 +644,7 @@ class MarkItDownStudio(ctk.CTk):
                 # Filter supported files or just load them and show warnings on conversion
                 if self.file_list_frame.add_file(resolved_path):
                     added_count += 1
-                    self.console.write_log(f"Aggiunto alla coda: {os.path.basename(resolved_path)}", "info")
+                    self.console.write_log(f"Added to queue: {os.path.basename(resolved_path)}", "info")
                     
             if added_count > 0:
                 self.update_batch_count()
@@ -652,7 +652,7 @@ class MarkItDownStudio(ctk.CTk):
 
     def on_batch_file_removed(self, filepath):
         """Callback when a file is manually removed from list."""
-        self.console.write_log(f"Rimosso dalla coda: {os.path.basename(filepath)}", "info")
+        self.console.write_log(f"Removed from queue: {os.path.basename(filepath)}", "info")
         self.update_batch_count()
         self.update_convert_buttons_state()
 
@@ -661,11 +661,11 @@ class MarkItDownStudio(ctk.CTk):
         self.file_list_frame.clear_all()
         self.update_batch_count()
         self.update_convert_buttons_state()
-        self.console.write_log("Coda di conversione multipla svuotata.", "info")
+        self.console.write_log("Batch conversion queue cleared.", "info")
 
     def update_batch_count(self):
         num_files = len(self.file_list_frame.get_all_filepaths())
-        self.batch_count_lbl.configure(text=f"Coda file da convertire: {num_files} file")
+        self.batch_count_lbl.configure(text=f"File conversion queue: {num_files} files")
 
     def toggle_batch_output_mode(self):
         """Toggle output directory configuration."""
@@ -677,7 +677,7 @@ class MarkItDownStudio(ctk.CTk):
             self.batch_output_entry.delete(0, "end")
             self.batch_output_entry.insert(0, "")
             self.batch_output_entry.configure(
-                placeholder_text="I file Markdown verranno posizionati accanto all'originale...", 
+                placeholder_text="Markdown files will be placed next to the original...", 
                 state="readonly",
                 text_color=TEXT_MUTED
             )
@@ -695,7 +695,7 @@ class MarkItDownStudio(ctk.CTk):
             if self.selected_batch_output_dir:
                 self.batch_output_entry.insert(0, self.selected_batch_output_dir)
             self.batch_output_entry.configure(
-                placeholder_text="Seleziona la cartella di destinazione...", 
+                placeholder_text="Select destination folder...", 
                 state="readonly",
                 text_color=TEXT_PRIMARY
             )
@@ -712,7 +712,7 @@ class MarkItDownStudio(ctk.CTk):
     def select_batch_output_dir(self):
         """Browse dialog for batch destination folder."""
         path = filedialog.askdirectory(
-            title="Seleziona la cartella di destinazione comune"
+            title="Select common destination folder"
         )
         if path:
             self.selected_batch_output_dir = os.path.abspath(path)
@@ -720,7 +720,7 @@ class MarkItDownStudio(ctk.CTk):
             self.batch_output_entry.delete(0, "end")
             self.batch_output_entry.insert(0, self.selected_batch_output_dir)
             self.batch_output_entry.configure(state="readonly")
-            self.console.write_log(f"Cartella di destinazione batch impostata su: {self.selected_batch_output_dir}", "info")
+            self.console.write_log(f"Batch destination folder set to: {self.selected_batch_output_dir}", "info")
             self.update_convert_buttons_state()
 
     def start_batch_conversion(self):
@@ -730,21 +730,21 @@ class MarkItDownStudio(ctk.CTk):
             
         files = self.file_list_frame.get_all_filepaths()
         if not files:
-            self.console.write_log("Errore: La coda dei file è vuota.", "error")
+            self.console.write_log("Error: The file queue is empty.", "error")
             return
             
         # If output mode is custom, verify path is selected
         out_dir = None
         if self.batch_output_mode == "custom":
             if not self.selected_batch_output_dir:
-                self.console.write_log("Errore: Selezionare una cartella di destinazione valida per i file convertiti.", "error")
+                self.console.write_log("Error: Please select a valid destination folder for the converted files.", "error")
                 return
             out_dir = self.selected_batch_output_dir
 
         self.is_converting = True
         
-        # Reset all file status badges to "In attesa"
-        self.file_list_frame.set_all_status("In attesa", TEXT_MUTED, "#1E293B")
+        # Reset all file status badges to "Pending"
+        self.file_list_frame.set_all_status("Pending", TEXT_MUTED, "#1E293B")
         self.file_list_frame.set_actions_state(False) # Disable trash buttons
         
         # UI controls state
@@ -757,7 +757,7 @@ class MarkItDownStudio(ctk.CTk):
         
         # Turn convert button into a Cancel button
         self.batch_convert_btn.configure(
-            text="Annulla Conversione",
+            text="Cancel Conversion",
             image=self.clear_icon,
             fg_color=COLOR_ERROR,
             hover_color=COLOR_ERROR_HOVER
@@ -774,7 +774,7 @@ class MarkItDownStudio(ctk.CTk):
             "on_complete": self.on_batch_complete
         }
         
-        self.console.write_log(f"Avvio conversione batch per {len(files)} file...", "info")
+        self.console.write_log(f"Starting batch conversion for {len(files)} files...", "info")
         self.batch_progress.set(0.0)
         
         # Start worker
@@ -789,25 +789,25 @@ class MarkItDownStudio(ctk.CTk):
     def cancel_batch_conversion(self):
         """Triggers batch conversion cancellation flag."""
         if self.batch_worker:
-            self.console.write_log("Richiesta di annullamento inviata... Attesa completamento operazione corrente.", "warning")
+            self.console.write_log("Cancellation request sent... Waiting for current operation to complete.", "warning")
             self.batch_worker.cancel()
-            self.batch_convert_btn.configure(state="disabled", text="Annullamento in corso...")
+            self.batch_convert_btn.configure(state="disabled", text="Cancelling...")
 
     # --- BATCH WORKER CALLBACKS ---
     def on_batch_file_start(self, filepath):
         filename = os.path.basename(filepath)
-        self.console.write_log(f"Inizio conversione: {filename}", "info")
-        self.file_list_frame.update_status(filepath, "In corso...", COLOR_WARNING, "#451A03")
+        self.console.write_log(f"Starting conversion: {filename}", "info")
+        self.file_list_frame.update_status(filepath, "Converting...", COLOR_WARNING, "#451A03")
 
     def on_batch_file_success(self, filepath, output_path):
         filename = os.path.basename(filepath)
-        self.console.write_log(f"Conversione riuscita: {filename} -> {os.path.basename(output_path)}", "success")
-        self.file_list_frame.update_status(filepath, "Successo", COLOR_SUCCESS, "#064E3B")
+        self.console.write_log(f"Conversion succeeded: {filename} -> {os.path.basename(output_path)}", "success")
+        self.file_list_frame.update_status(filepath, "Success", COLOR_SUCCESS, "#064E3B")
 
     def on_batch_file_error(self, filepath, error_msg):
         filename = os.path.basename(filepath)
-        self.console.write_log(f"ERRORE su {filename}: {error_msg}", "error")
-        self.file_list_frame.update_status(filepath, "Errore", COLOR_ERROR, "#4C0519")
+        self.console.write_log(f"ERROR on {filename}: {error_msg}", "error")
+        self.file_list_frame.update_status(filepath, "Error", COLOR_ERROR, "#4C0519")
 
     def on_batch_progress(self, current, total):
         progress_val = current / total
@@ -826,7 +826,7 @@ class MarkItDownStudio(ctk.CTk):
         
         # Restore convert button action and styling
         self.batch_convert_btn.configure(
-            text="Converti Tutti i File",
+            text="Convert All Files",
             image=self.lightning_icon,
             fg_color=COLOR_ACCENT,
             hover_color=COLOR_ACCENT_HOVER,
@@ -839,9 +839,9 @@ class MarkItDownStudio(ctk.CTk):
         
         # Log summary
         if is_cancelled:
-            self.console.write_log(f"Conversione batch ANNULLATA. File convertiti con successo: {success_num}, Falliti: {error_num}", "warning")
+            self.console.write_log(f"Batch conversion CANCELLED. Successfully converted files: {success_num}, Failed: {error_num}", "warning")
         else:
-            self.console.write_log(f"Conversione batch completata! Riusciti: {success_num}, Falliti: {error_num}", "success")
+            self.console.write_log(f"Batch conversion completed! Succeeded: {success_num}, Failed: {error_num}", "success")
             
         self.update_convert_buttons_state()
 
