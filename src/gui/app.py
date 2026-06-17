@@ -9,7 +9,7 @@ from src.gui.theme import (
     COLOR_ACCENT_MUTED, COLOR_WARNING
 )
 from src.gui.widgets import LogConsole, FileListScrollFrame
-from src.core.converter import MarkdownConverter, BatchConversionWorker
+from src.core.converter import MarkdownConverter, BatchConversionWorker, MARKITDOWN_AVAILABLE
 from src.utils.icons import get_ctk_image
 from src.utils.helpers import is_supported_file
 
@@ -448,11 +448,22 @@ class MarkItDownStudio(ctk.CTk):
     def log_init_status(self):
         self.console.write_log("Benvenuto in MarkItDown Studio!", "info")
         if not self.converter.is_available():
-            self.console.write_log(
-                "ERRORE DI SISTEMA: La libreria 'markitdown' non è installata o non si è inizializzata.\n"
-                "Installa la libreria eseguendo: pip install \"markitdown[all]\" nel terminale.",
-                "error"
-            )
+            if not MARKITDOWN_AVAILABLE:
+                self.console.write_log(
+                    "ERRORE DI SISTEMA: La libreria 'markitdown' non è installata.\n"
+                    "Installa la libreria eseguendo: pip install \"markitdown[all]\" nel terminale.",
+                    "error"
+                )
+            else:
+                self.console.write_log(
+                    "ERRORE DI SISTEMA: La libreria 'markitdown' è installata ma non si è inizializzata correttamente.",
+                    "error"
+                )
+                if self.converter.init_error:
+                    self.console.write_log(
+                        f"Dettaglio errore di inizializzazione:\n{self.converter.init_error}",
+                        "error"
+                    )
             # Disable actions
             self.single_convert_btn.configure(state="disabled")
             self.batch_convert_btn.configure(state="disabled")

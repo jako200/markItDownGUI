@@ -15,10 +15,13 @@ class MarkdownConverter:
     """
     def __init__(self):
         self.md_engine = None
+        self.init_error = None
         if MARKITDOWN_AVAILABLE:
             try:
                 self.md_engine = MarkItDown()
-            except Exception:
+            except Exception as e:
+                import traceback
+                self.init_error = traceback.format_exc()
                 # Catch any issues with internal sub-engines initialization
                 pass
 
