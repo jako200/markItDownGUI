@@ -35,7 +35,7 @@ class MarkdownConverter:
         Throws exceptions on failures.
         """
         if not self.is_available():
-            raise RuntimeError("Microsoft MarkItDown non è installato o non si è inizializzato correttamente.")
+            raise RuntimeError("Microsoft MarkItDown is not installed or did not initialize correctly.")
             
         input_path = os.path.abspath(input_path)
         output_path = os.path.abspath(output_path)
