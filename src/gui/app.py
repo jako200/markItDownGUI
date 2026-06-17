@@ -96,9 +96,12 @@ class MarkItDownStudio(ctk.CTk):
             segmented_button_selected_hover_color=COLOR_ACCENT_HOVER,
             segmented_button_unselected_color=BG_MAIN,
             segmented_button_unselected_hover_color=COLOR_ACCENT_MUTED,
-            text_color=TEXT_PRIMARY,
-            font=get_font(13, weight="bold")
+            text_color=TEXT_PRIMARY
         )
+        try:
+            self.tabview._segmented_button.configure(font=get_font(13, weight="bold"))
+        except Exception:
+            pass
         self.tabview.grid(row=1, column=0, padx=30, pady=(0, 10), sticky="nsew")
         
         # Add tabs
