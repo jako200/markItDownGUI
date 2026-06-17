@@ -5,7 +5,7 @@ import customtkinter as ctk
 
 from src.gui.theme import (
     BG_MAIN, BG_CARD, BORDER_CARD, COLOR_ACCENT, COLOR_ACCENT_HOVER,
-    COLOR_SUCCESS, COLOR_ERROR, TEXT_PRIMARY, TEXT_MUTED, get_font,
+    COLOR_SUCCESS, COLOR_ERROR, COLOR_ERROR_HOVER, TEXT_PRIMARY, TEXT_MUTED, get_font,
     COLOR_ACCENT_MUTED, COLOR_WARNING
 )
 from src.gui.widgets import LogConsole, FileListScrollFrame
