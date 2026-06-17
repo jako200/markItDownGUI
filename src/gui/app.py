@@ -27,7 +27,7 @@ class MarkItDownStudio(ctk.CTk):
         self.grid_columnconfigure(0, weight=1)
         self.grid_rowconfigure(0, weight=0) # Header
         self.grid_rowconfigure(1, weight=1) # Main Tabview (expands)
-        self.grid_rowconfigure(2, weight=0) # Console
+        self.grid_rowconfigure(2, weight=0, minsize=180) # Console
         
         # Core converter
         self.converter = MarkdownConverter()
@@ -116,7 +116,7 @@ class MarkItDownStudio(ctk.CTk):
         # 3. CONSOLE LOGS (BOTTOM)
         # ----------------------------------------------------
         self.console = LogConsole(self)
-        self.console.grid(row=2, column=0, padx=30, pady=(0, 20), sticky="ew", minsize=180)
+        self.console.grid(row=2, column=0, padx=30, pady=(0, 20), sticky="ew")
 
     def setup_single_conversion_tab(self):
         tab = self.tabview.tab("Conversione Singola")
