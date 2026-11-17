@@ -1,97 +1,107 @@
-# MarkItDown Studio
+# MarkItDown Studio — GUI
 
-A modern and elegant Graphical User Interface (GUI) for the **Microsoft MarkItDown** tool, developed in Python using the **CustomTkinter** library. It allows users to easily convert various file formats into Markdown (`.md`) documents without having to use the command line.
+A modern, elegant **graphical desktop application** for [Microsoft MarkItDown](https://github.com/microsoft/markitdown), built in Python with [CustomTkinter](https://customtkinter.tomschimansky.com/).  
+Convert Word, PowerPoint, Excel, PDF, HTML and more to Markdown in a few clicks — no command line required.
+
+> **Two flavours available — pick yours:**
+>
+> | | Repo | Best for |
+> |---|---|---|
+> | 🖥️ **MarkItDown Studio** (this one) | [github.com/jako200/markItDownGUI](https://github.com/jako200/markItDownGUI) | Desktop users, Windows / macOS / Linux with GUI |
+> | 🖮 **MarkItDown TUI** | [github.com/jako200/markItDownTUI](https://github.com/jako200/markItDownTUI) | Terminal users, headless servers, SSH sessions |
+>
+> Both share the same conversion engine and support the same file formats.
 
 ---
 
 ## 🚀 Key Features
 
-- **Premium Dark Interface**: Modern design inspired by the *Obsidian* dark palette, featuring support for micro-interactions and dynamically generated icons.
-- **Multi-Format Support**: Seamless conversion of Word documents (`.docx`), PowerPoint presentations (`.pptx`), Excel spreadsheets (`.xlsx`), PDF files (`.pdf`), HTML pages (`.html`), and plain text files (`.txt`).
-- **Asynchronous Conversion**: Conversion processes run on a separate background thread to prevent the GUI from freezing.
-- **Progress Bar**: Real-time visual feedback during operations.
-- **Dedicated Log Console**: Detailed history of operations with color-coded messaging based on severity (General Messages, Successes, and Errors).
-- **Flexible Path Management**: Automatic output file name generation (saved in the same directory as the input file) with an option for manual destination customization.
-- **Automated Compiler**: Built-in build script to easily generate a standalone `.exe` executable for Windows.
+- **Premium Dark Theme** — Obsidian-inspired palette with smooth micro-interactions and dynamically generated SVG icons.
+- **Single File Conversion** — browse, preview file info, choose a custom output destination and convert in one click.
+- **Batch Conversion** — queue multiple files or entire folders, monitor per-file status, cancel at any time.
+- **Asynchronous Engine** — conversion runs on a background thread; the UI never freezes.
+- **Progress Bar & Log Console** — real-time progress and colour-coded log (Info / Success / Warning / Error).
+- **Windows Executable** — built-in `build.py` script produces a standalone `.exe` via PyInstaller (no Python required on the target machine).
 
 ---
 
-## 🛠️ Prerequisites and Installation
+## 🗂️ Supported Formats
 
-Ensure you have **Python 3.8** or higher installed on your system.
+| Format | Extension(s) |
+|---|---|
+| Word Document | `.docx` |
+| PowerPoint Presentation | `.pptx` |
+| Excel Spreadsheet | `.xlsx` |
+| PDF | `.pdf` |
+| HTML / Web page | `.html`, `.htm` |
+| Plain text / Code | `.txt`, `.csv`, `.xml`, `.json` |
+
+---
+
+## 🛠️ Requirements & Installation
+
+Requires **Python 3.8+**.
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/jako200/markItDownGUI
-cd markItDownUI
-
+git clone https://github.com/jako200/markItDownGUI.git
+cd markItDownGUI
 ```
 
 ### 2. Install dependencies
-
-You can install the dependencies listed in the `requirements.txt` file by running the following command in your terminal:
-
 ```bash
 pip install -r requirements.txt
-
 ```
 
-*Note: If you are using PowerShell and encounter syntax issues with square brackets for `markitdown[all]`, install the dependencies manually by enclosing the package name in quotes:*
-
-```powershell
-pip install customtkinter Pillow "markitdown[all]"
-
-```
+> **PowerShell note:** if you get a syntax error with square brackets, quote the package name:
+> ```powershell
+> pip install customtkinter Pillow "markitdown[all]"
+> ```
 
 ---
 
-## 💻 How to Run the Application
-
-To launch the graphical interface in a development environment, execute the `main.py` file:
+## 💻 Run the Application
 
 ```bash
 python main.py
-
 ```
 
 ---
 
-## 📦 Compilation and Distribution (Creating the .exe)
+## 📦 Build a Standalone Executable (Windows)
 
-The project includes an automated build script named `build.py` that utilizes **PyInstaller** to package the application into a single standalone executable file for Windows (`.exe`), which will not require a Python installation on the end-user's computer.
-
-To compile the application:
-
-1. Install PyInstaller (if not already installed):
 ```bash
 pip install pyinstaller
-
-```
-
-
-2. Run the build script:
-```bash
 python build.py
-
 ```
 
-
-
-The script will automatically perform the following operations:
-
-* Verify the presence of all required dependencies.
-* Launch PyInstaller, correctly importing the graphical assets and themes from `customtkinter` and `markitdown`.
-* Create a standalone executable in the `dist/` directory, renaming it to `MarkItDown_Studio_Windows_x64.exe`.
+The script will verify dependencies, run PyInstaller and place `MarkItDown_Studio_Windows_x64.exe` in the `dist/` folder.
 
 ---
 
-## 🗂️ Supported File Formats by MarkItDown
+## 🏗️ Project Structure
 
-The underlying conversion engine converts the following formats into Markdown:
+```
+markItDownGUI/
+├── main.py               # Entry point
+├── requirements.txt      # Dependencies (customtkinter, Pillow, markitdown[all])
+├── build.py              # PyInstaller automation script
+├── src/
+│   ├── core/
+│   │   └── converter.py  # MarkItDown wrapper + BatchConversionWorker
+│   ├── gui/
+│   │   ├── app.py        # Main window, tabs, event handling
+│   │   ├── widgets.py    # LogConsole, FileListScrollFrame
+│   │   └── theme.py      # Obsidian colour palette & fonts
+│   └── utils/
+│       ├── helpers.py    # Format detection & size formatting
+│       └── icons.py      # SVG icon generator
+└── dist/                 # Output folder for the compiled .exe
+```
 
-* **Word** (`.docx`)
-* **PowerPoint** (`.pptx`)
-* **Excel** (`.xlsx`)
-* **PDF** (`.pdf`)
-* **HTML** (`.html`)
-* **Plain text** (`.txt`, etc.)
+---
+
+## 🔗 Related Project
+
+Looking for a **terminal version** that runs anywhere without a desktop environment?  
+➡️ Check out [**MarkItDown TUI**](https://github.com/jako200/markItDownTUI) — same features, same engine, pure terminal UI powered by [Textual](https://textual.textualize.io/).
