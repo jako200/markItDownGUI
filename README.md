@@ -1,4 +1,4 @@
-# MarkItDown Studio — GUI
+# MarkItDown GUI
 
 A modern, elegant **graphical desktop application** for [Microsoft MarkItDown](https://github.com/microsoft/markitdown), built in Python with [CustomTkinter](https://customtkinter.tomschimansky.com/).  
 Convert Word, PowerPoint, Excel, PDF, HTML and more to Markdown in a few clicks — no command line required.
